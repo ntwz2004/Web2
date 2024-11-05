@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <header>
+      <nav class="navbar">
+        <a class="logo" href="{{ url_for('main') }}">
+          <img src="https://bit.ly/3Ak5v7V" alt="Logo" />
+        </a>
+        <ul class="menu-links">
+          <span id="close-menu-btn" class="material-symbols-outlined">close</span>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" id="profile-icon">
+              <span class="material-symbols-outlined">account_circle</span> 
+              <span class="username">{{ current_user }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ url_for('main') }}">Home</a></li>
+              <li><a href="{{ url_for('index') }}">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  </head>
+  <body>
+    
+
+    
+      <!--Hey! This is the original version
+    of Simple CSS Waves-->
+
+  <div class="header">
+
+      <!--Content before waves-->
+    <div class="inner-header flex">
+      <!--Just the logo.. Don't mind this-->
+      <div class="container">
+        <div class="box">
+          <div class="boxContent">
+            <i class="fa fa-microchip icon"></i>
+            <h1 class="title">Add Patient</h1>
+            
+          </div>
+          <a href="{{ url_for('add') }}"></a>
+        </div>
+        <div class="box">
+          <div class="boxContent">
+            <i class="fa fa-calendar icon"></i>
+            <h1 class="title">Search/Edit Patient</h1>
+            
+          </div>
+          <a href="{{ url_for('search') }}"></a>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+  <!--Waves Container-->
+  <div>
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(26, 188, 156, 0.7)" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(26, 188, 156, 0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(26, 188, 156, 0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="#1abc9c" />
+      </g>
+    </svg>
+  </div>
+  <!--Waves end-->
+  
+</div>
+  <!--Header ends-->
+  
+  <!--Content starts-->
+  <div class="bot">
+    <div class="content flex">
+      <p>? </p>
+    </div>
+  </div>
+  <!--Content ends-->
+  <script>
+    // แสดงหรือซ่อนเมนูเมื่อคลิกที่โปรไฟล์
+    document.getElementById('profile-icon').addEventListener('click', function(event) {
+        event.stopPropagation(); // ป้องกันไม่ให้คลิกในโปรไฟล์ทำให้หน้าต่างปิด
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // ปิดเมนูเมื่อคลิกนอกโปรไฟล์
+    document.addEventListener('click', function() {
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        dropdownMenu.style.display = 'none';
+    });
+
+  </script>
+
+    
+    
+  </body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <title>Search Page</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a class="logo" href="{{ url_for('main') }}">
+                <img src="https://bit.ly/3Ak5v7V" alt="Logo" />
+            </a>
+            <ul class="menu-links">
+                <span id="close-menu-btn" class="material-symbols-outlined">close</span>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="profile-icon">
+                        <span class="material-symbols-outlined">account_circle</span> 
+                        <span class="username">{{ current_user }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('main') }}">Home</a></li>
+                        <li><a href="{{ url_for('add') }}">Add</a></li>
+                        <li><a href="{{ url_for('search') }}">Search/Edit</a></li>
+                        <li><a href="{{ url_for('index') }}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="filter-section">
+            <select id="filter-type" onchange="updatePlaceholder()">
+                <option value="name">Name</option>
+                <option value="surname">Surname</option>
+                <option value="dental_number">Dental Number</option>
+                <option value="diagnosis">Diagnosis</option>
+                <option value="icd_10">ICD-10</option>
+                <option value="type_of_visit">Type of Visit</option>
+                <option value="date">Date</option>  
+            </select>
+
+            <input type="text" id="filter-input" name="filter_value" placeholder="Enter Name" style="display: inline;" />
+            <select id="visit-type-select" style="display: none;">
+                <option value="">Select Visit Type</option>
+                <option value="New patient">New Patient</option>
+                <option value="Follow up">Follow Up</option>
+            </select>
+
+            <button type="button" class="button" onclick="performSearch()">Search</button>
+            <button type="button" class="reset-button"  onclick="resetFilters()">Reset</button>
+        </section>
+
+        <!-- Table to display search results -->
+        <table class="result-table" id="result-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Dental Number</th>
+                    <th>Diagnosis</th>
+                    <th>ICD-10</th>
+                    <th>Type of Visit</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+
+        <div id="no-results-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <p>No search results found</p>
+                <button type="button" onclick="redirectToAdd()">Add New Patient</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function updatePlaceholder() {
+            const filterType = document.getElementById("filter-type").value;
+            const filterInput = document.getElementById("filter-input");
+            const visitTypeSelect = document.getElementById("visit-type-select");
+
+            filterInput.style.display = "none";
+            visitTypeSelect.style.display = "none";
+
+            if (filterType === "type_of_visit") {
+                visitTypeSelect.style.display = "inline";
+            } else {
+                filterInput.style.display = "inline";
+                switch (filterType) {
+                    case "name":
+                        filterInput.placeholder = "Enter Name";
+                        filterInput.type = "text";
+                        break;
+                    case "surname":
+                        filterInput.placeholder = "Enter Surname";
+                        filterInput.type = "text";
+                        break;
+                    case "dental_number":
+                        filterInput.placeholder = "Enter Dental Number";
+                        filterInput.type = "text";
+                        break;
+                    case "diagnosis":
+                        filterInput.placeholder = "Enter Diagnosis";
+                        filterInput.type = "text";
+                        break;
+                    case "icd_10":
+                        filterInput.placeholder = "Enter ICD-10 Code";
+                        filterInput.type = "text";
+                        break;
+                    case "date":
+                        filterInput.placeholder = "Select Date";
+                        filterInput.type = "date";
+                        break;
+                }
+            }
+        }
+
+        function performSearch() {
+            const filterType = document.getElementById("filter-type").value;
+            const filterValue = filterType === "type_of_visit" ? document.getElementById("visit-type-select").value : document.getElementById("filter-input").value;
+            const table = document.getElementById("result-table");
+            const tableBody = document.getElementById("table-body");
+        
+            fetch('/search_results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filterType, filterValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                tableBody.innerHTML = ""; // ล้างข้อมูลก่อนแสดงผลลัพธ์ใหม่
+                if (data.length > 0) {
+                    table.style.display = "table";
+                    
+                    data.forEach((item, index) => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${item.name}</td>
+                            <td>${item.surname}</td>
+                            <td>${item.dental_number}</td>
+                            <td>${item.diagnosis}</td>
+                            <td>${item.icd_10}</td>
+                            <td>${item.type_of_visit}</td>
+                            <td>${item.date}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+    } else {
+        table.style.display = "none";
+        showModal();  // เรียกใช้ modal เมื่อไม่พบข้อมูล
+    }
+})
+            .catch(error => console.error('Error:', error));
+        }
+
+        function resetFilters() {
+            document.getElementById("filter-type").value = "name";
+            updatePlaceholder();
+            document.getElementById("filter-input").value = "";
+            document.getElementById("visit-type-select").style.display = "none";
+            document.getElementById("visit-type-select").value = "";
+        }
+
+        function showModal() {
+            const modal = document.getElementById("no-results-modal");
+            modal.style.display = "flex";  // ใช้ flex เพื่อให้ modal อยู่ตรงกลาง
+            console.log("Showing modal"); // ตรวจสอบการทำงาน
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById("no-results-modal");
+            modal.style.display = "none";
+        }
+        
+
+        function redirectToAdd() {
+            window.location.href = "{{ url_for('add') }}";
+        }
+
+        document.getElementById('profile-icon').addEventListener('click', function(event) {
+            event.stopPropagation();
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function() {
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            dropdownMenu.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

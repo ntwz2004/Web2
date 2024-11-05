@@ -1,0 +1,386 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+header {
+    position: relative; /* ทำให้ Navbar อยู่ที่ตำแหน่งที่แน่นอน */
+    top: 0; /* ติดอยู่ที่ด้านบน */
+    left: 0;
+    width: 100%; /* ครอบคลุมความกว้างทั้งหมด */
+    padding: 20px; /* เพิ่ม padding */
+    background-color: #1abc9c; /* สีพื้นหลังของ Navbar */
+    z-index: 1000; /* ให้แน่ใจว่า Navbar อยู่บนสุด */
+}
+
+body {
+    margin: 0; /* ยกเลิก margin ของ body */
+   
+    font-family: Arial, sans-serif; /* ใช้ฟอนต์มาตรฐาน */
+}
+
+header .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar .logo {
+  display: flex; /* Allow for flexible alignment */
+  align-items: center; /* Center the logo vertically */
+}
+
+.navbar .logo img {
+  height: 50px; /* Size of the logo for computers */
+  max-height: 50px; /* Prevent exceeding */
+  width: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Space between logo and text */
+}
+
+.navbar .logo span {
+  color: #C06B3E;
+  font-weight: 600; /* If you have text next to the logo */
+  font-size: 2.1rem;
+  text-decoration: none;
+}
+
+.navbar .menu-links {
+  display: flex;
+  list-style: none;
+  gap: 35px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #C06B3E;
+}
+
+.hero-section {
+  height: 100vh;
+  background-image: url("https://bit.ly/40fM3ns");
+  background-position: center;
+  background-size: cover;
+  display: relative;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.inner-header .content { 
+  margin: 0 auto;
+  color: #fff; 
+  padding: 30px; /* ระยะห่างระหว่างขอบกับเนื้อหา */
+  background-color: rgba(26, 188, 156, 0.5); /* พื้นหลังสีดำโปร่งแสง */
+  border-radius: 25px; /* กำหนดขอบโค้ง */
+}
+
+.inner-header .content h2 {
+  font-size: 3rem;
+  max-width: 1000px;
+  line-height: 70px;
+}
+
+.inner-header .content p {
+  font-weight: 300;
+  max-width: 600px;
+  margin-top: 15px;
+}
+
+.inner-header .content button {
+  background: #e67e22;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 38px;
+  cursor: pointer;
+  font: 300 1rem;
+  transition: 0.2s;
+  width: auto; /* เปลี่ยนเป็น 'auto' หรือกำหนดความกว้างตามต้องการ */
+  max-width: 150px; /* กำหนดความกว้างสูงสุดตามต้องการ */
+}
+
+
+.inner-header .content button:hover {
+  color: #1abc9c;
+  background: #ffffff;
+}
+
+#close-menu-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  display: none;
+}
+
+#hamburger-btn {
+  color: #fff;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 10px;
+  }
+
+  header.show-mobile-menu::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+  }
+
+  .navbar .logo {
+    font-size: 1.7rem;
+  }
+
+  #hamburger-btn, #close-menu-btn {
+    display: block;
+  }
+
+  .navbar .menu-links {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background: #fff;
+    flex-direction: column;
+    padding: 70px 40px 0;
+    transition: left 0.2s ease;
+  }
+
+  header.show-mobile-menu .navbar .menu-links {
+    left: 0;
+  }
+
+  .navbar a {
+    color: #000;
+  }
+
+  .hero-section .content {
+    text-align: center;
+  }
+
+  .hero-section .content :is(h2, p) {
+    max-width: 100%;
+  }
+
+  .hero-section .content h2 {
+    font-size: 2.3rem;
+    line-height: 60px;
+  }
+
+  .hero-section .content button {
+    padding: 9px 18px;
+  }
+
+  .navbar .logo img {
+    height: 50px; 
+    max-height: 50px;
+    width: auto;
+    margin-right: 10px;
+  }
+}
+
+/* Table styles */
+.table-container {
+  overflow-x: auto; /* Enables horizontal scrolling */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow under the table */
+  margin: 20px 0; /* Space around the table */
+}
+
+table {
+  width: 100%; /* Set table width */
+  border-collapse: collapse; /* Combine cell borders */
+  margin-top: 20px; /* Top margin */
+}
+
+th, td {
+  padding: 12px; /* Cell padding */
+  text-align: left; /* Align text to the left */
+  border: 1px solid #ddd; /* Cell borders */
+}
+
+th {
+  background-color: #1abc9c; /* Header background color */
+  color: white; /* Header text color */
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2; /* Even row background color */
+}
+
+tr:hover {
+  background-color: #d9f5f0; /* Row hover background color */
+}
+
+/* Style สำหรับฟอร์ม */
+.form-container {
+  max-width: 500px; /* ความกว้างสูงสุดของฟอร์ม */
+  margin: 100px auto; /* จัดกลางฟอร์มในหน้า */
+  padding: 20px; /* Padding รอบฟอร์ม */
+  background-color: #ffffff; /* สีพื้นหลังของฟอร์ม */
+  border-radius: 8px; /* มุมโค้งของฟอร์ม */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* เงาของฟอร์ม */
+}
+
+.form-container h2 {
+  text-align: center; /* จัดกลางหัวเรื่อง */
+  color: #1abc9c; /* สีของหัวเรื่อง */
+  margin-bottom: 20px; /* ช่องว่างด้านล่าง */
+}
+
+.form-group {
+  margin-bottom: 15px; /* ช่องว่างระหว่างกลุ่มฟอร์ม */
+}
+
+.form-group label {
+  display: block; /* ทำให้ label แสดงเป็นบล็อก */
+  margin-bottom: 5px; /* ช่องว่างด้านล่างของ label */
+  font-weight: 600; /* ทำให้ข้อความหนาขึ้น */
+}
+
+.form-group input {
+  width: 100%; /* ให้ input ใช้ความกว้างทั้งหมด */
+  padding: 10px; /* Padding ภายใน input */
+  border: 1px solid #ddd; /* สีขอบของ input */
+  border-radius: 4px; /* มุมโค้งของ input */
+  font-size: 1rem; /* ขนาดฟอนต์ */
+  transition: border-color 0.3s; /* การเปลี่ยนสีขอบอย่างนุ่มนวล */
+}
+
+.form-group input:focus {
+  border-color: #1abc9c; /* เปลี่ยนสีขอบเมื่อมีการโฟกัส */
+  outline: none; /* ไม่ให้มีเส้นรอบตัว */
+}
+
+button {
+  width: 100%; /* ปุ่มเต็มความกว้าง */
+  padding: 12px; /* Padding รอบปุ่ม */
+  background-color:#e67e22; /* สีพื้นหลังของปุ่ม */
+  color: white; /* สีตัวอักษรของปุ่ม */
+  border: none; /* ไม่มีขอบ */
+  border-radius: 4px; /* มุมโค้งของปุ่ม */
+  font-size: 1.1rem; /* ขนาดฟอนต์ของปุ่ม */
+  cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อชี้ที่ปุ่ม */
+  transition: background-color 0.3s; /* การเปลี่ยนสีพื้นหลังอย่างนุ่มนวล */
+}
+
+button:hover {
+  background-color: #C06B3E; /* เปลี่ยนสีพื้นหลังเมื่อชี้ที่ปุ่ม */
+}
+
+@import url(//fonts.googleapis.com/css?family=Lato:300:400);
+
+.bot .content {
+  position:relative;
+  height:5vh;
+  text-align:center;
+  background-color: #1abc9c;
+}
+
+h1 {
+  font-family: 'Lato', sans-serif;
+  font-weight:300;
+  letter-spacing: 2px;
+  font-size:48px;
+}
+p {
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  font-size:14px;
+  color: #ffffff;
+  position: relative;
+
+}
+
+.header {
+  position:relative;
+  text-align:center;
+  background-image: url("https://bit.ly/40fM3ns");
+  background-position: center;
+  background-size: cover;
+  color:white;
+}
+.inner-header {
+  height:75vh;
+  width:100%;
+  margin: 0;
+  padding: 0;
+}
+
+.flex { /*Flexbox for containers*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.waves {
+  position:relative;
+  width: 100%;
+  height:0vh;
+  margin-bottom:-7px; /*Fix for safari gap*/
+  min-height:100px;
+  max-height:150px;
+}
+
+
+/* Animation */
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+   transform: translate3d(-90px,0,0);
+  }
+  100% { 
+    transform: translate3d(85px,0,0);
+  }
+}
+/*Shrinking for mobile*/
+@media (max-width: 768px) {
+  .waves {
+    height:40px;
+    min-height:40px;
+  }
+  .content {
+    height:30vh;
+  }
+  h1 {
+    font-size:24px;
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <a class="logo" href="{{ url_for('index') }}">
+            <img src="https://bit.ly/3Ak5v7V" alt="Logo" />
+        </a>
+  
+      </nav>
+    </header>
+
+    
+      <!--Hey! This is the original version
+of Simple CSS Waves-->
+
+<div class="header">
+
+  <!--Content before waves-->
+  <div class="inner-header flex">
+  <!--Just the logo.. Don't mind this-->
+  <div class="content">
+    <p>
+    <h2>Patient Management System</h2>
+      
+    <button onclick="window.location.href='{{ url_for('login') }}'">Sign in</button>
+  </div>
+  </div>
+  
+  
+  <!--Waves Container-->
+  <div>
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(26, 188, 156, 0.7)" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(26, 188, 156, 0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(26, 188, 156, 0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="#1abc9c" />
+      </g>
+    </svg>
+  </div>
+  <!--Waves end-->
+  
+</div>
+  <!--Header ends-->
+  
+  <!--Content starts-->
+  <div class="bot">
+    <div class="content flex">
+      <p>  </p>
+    </div>
+  </div>
+  <!--Content ends-->
+
+    
+    
+  </body>
+</html>
