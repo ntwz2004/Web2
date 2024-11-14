@@ -1,0 +1,310 @@
+.filter-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    justify-content: center;
+}
+.filter-section select {
+    padding: 8px;
+    font-size: 16px;
+    width: 200px; /* Set the same width as input */
+}
+.filter-section input {
+    padding: 7px;
+    font-size: 16px;
+    width: 200px;
+}
+.filter-section button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    width: auto;
+}
+/* Result Table */
+.result-table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
+.result-table th, .result-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+.result-table th {
+    background-color: #1abc9c;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.result-table button {
+    padding:7px 0px;
+    font-size: 14px;
+    color: white;
+    background-color: #1abc9c;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.result-table button:hover {
+    background-color: #16a085;
+}
+
+button {
+    cursor: pointer;
+    margin-top: 1px; /* ระยะห่างระหว่างปุ่มและฟิลด์ */
+    background-color: #1abc9c; /* สีพื้นหลังสำหรับปุ่มหลัก */
+    color: white;
+    border: none;
+    border-radius: px;
+    padding: 12px 20px; /* ขนาด padding ของปุ่มหลัก */
+    font-size: 1rem; /* ขนาดฟอนต์ของปุ่มหลัก */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+button:hover {
+    background-color: #16a085; /* เปลี่ยนสีเมื่อเลื่อนเมาส์ไปที่ปุ่มหลัก */
+}
+
+.reset-button {
+    background: #e74c3c; /* สีพื้นหลัง */
+    color: #fff; /* สีข้อความ */
+    padding: 12px 20px; /* การจัดการพื้นที่ */
+    border: none; /* ไม่มีกรอบ */
+    border-radius: 6px; /* มุมโค้ง */
+    cursor: pointer; /* แสดงเป็นมือเมื่อชี้ไปที่ปุ่ม */
+    transition: background 0.2s; /* การเปลี่ยนสีเมื่อมีการโฮเวอร์ */
+}
+
+.reset-button:hover {
+    background: #c0392b; /* เปลี่ยนสีเมื่อโฮเวอร์ */
+}
+
+/*edit*/
+
+/* Modal Overlay */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 600px; /* ลดขนาดความกว้าง */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: fadeIn 0.3s ease;
+    max-height: 80vh; /* Maximum height of 80% of the viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #888 #f1f1f1; /* For Firefox */
+    
+}
+
+
+/* Webkit (Chrome, Safari, newer versions of Opera) scrollbar styling */
+.modal-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+/* สไตล์สำหรับปุ่ม + */
+.add-diagnosis-btn {
+    background-color: #1abc9c !important; /* สีพื้นหลังปุ่ม + */
+    color: white !important; /* สีตัวอักษรปุ่ม + */
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s !important;
+    width: 30px !important; /* ขนาดปุ่ม */
+    height: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.add-diagnosis-btn:hover {
+    background-color: #16a085 !important; /* สีเมื่อ hover สำหรับปุ่ม + */
+}
+
+/* สไตล์สำหรับปุ่ม - */
+.remove-diagnosis-btn {
+    background-color: #e74c3c !important; /* สีพื้นหลังปุ่ม - */
+    color: white !important; /* สีตัวอักษรปุ่ม - */
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s !important;
+    width: 30px !important; /* ขนาดปุ่ม */
+    height: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: 5px !important;
+}
+
+.remove-diagnosis-btn:hover {
+    background-color: #c0392b !important; /* สีเมื่อ hover สำหรับปุ่ม - */
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #e74c3c;
+}
+
+
+/* Form Elements */
+.modal-content h2 {
+    color: #1abc9c;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-content label {
+    font-size: 14px;
+    color: #333;
+}
+
+.modal-content .form-row {
+    display: flex;
+    gap: 10px; /* ระยะห่างระหว่าง input */
+    margin-top: 10px;
+}
+
+.modal-content .form-row label {
+    flex: 1;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.modal-content input[readonly] {
+    background-color: #f4f4f4;
+    color: #666;
+}
+
+/* Save Changes Button */
+.modal-content button {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #16a085;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.form-group {
+    display: flex; /* ใช้ flexbox เพื่อจัดแนว */
+    align-items: center; /* จัดแนวกลางแนวตั้ง */
+    margin-bottom: 20px; /* ระยะห่างระหว่างกลุ่มฟอร์ม */
+}
+
+.form-group label {
+    margin-right: 10px; /* ระยะห่างระหว่าง label และ input */
+}
+
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-button:hover {
+    background-color: darkred; /* สีเข้มขึ้นเมื่อชี้เมาส์ */
+}
+
+/* Styles for the select dropdown */
+select {
+    width: 100%; /* ให้กว้างเต็มที่ */
+    padding: 10px; /* ระยะห่างด้านใน */
+    border: 1px solid #ccc; /* เส้นขอบ */
+    border-radius: 5px; /* มุมโค้ง */
+    font-size: 16px; /* ขนาดฟอนต์ */
+    background-color: #f9f9f9; /* สีพื้นหลัง */
+    transition: border-color 0.3s; /* เอฟเฟกต์การเปลี่ยนสีขอบ */
+}
+
+/* Change border color on focus */
+select:focus {
+    border-color: #4a90e2; /* เปลี่ยนสีเมื่อเลือก */
+    outline: none; /* ลบเส้นขอบที่เป็นดีฟอลต์ */
+}
+
+/* Style for the label */
+label {
+    font-weight: bold; /* ทำให้ฟอนต์หนา */
+    margin-bottom: 5px; /* ระยะห่างด้านล่าง */
+    display: block; /* ให้ label แสดงเป็นบล็อก */
+}
+
+/* Flex container for better alignment */
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* ระยะห่างระหว่างบล็อก */
+}
+
+button i {
+    font-size: 16px; /* กำหนดขนาดไอคอน */
+    color: #ffffff; /* กำหนดสีของไอคอนตามธีม */
+}
