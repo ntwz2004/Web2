@@ -308,3 +308,8 @@ button i {
     font-size: 16px; /* กำหนดขนาดไอคอน */
     color: #ffffff; /* กำหนดสีของไอคอนตามธีม */
 }
+
+p{
+    font-size: 2rem;
+    font-weight: bold;
+}

@@ -202,3 +202,7 @@ button:hover {
     cursor: pointer;
 }
 
+p{
+    font-size: 2rem;
+    font-weight: bold;
+}

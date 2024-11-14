@@ -139,4 +139,7 @@ body {
     display: block;
 }
 
-
+p{
+    font-size: 2rem;
+    font-weight: bold;
+}
