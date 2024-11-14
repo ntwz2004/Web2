@@ -6,93 +6,378 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <title>Search Page</title>
 </head>
-<body>
-    <header>
-        <nav class="navbar">
+
+    <body>
+        <header>
+            <nav class="navbar">
             <a class="logo" href="{{ url_for('main') }}">
                 <img src="https://bit.ly/3Ak5v7V" alt="Logo" />
             </a>
             <ul class="menu-links">
                 <span id="close-menu-btn" class="material-symbols-outlined">close</span>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="profile-icon">
-                        <span class="material-symbols-outlined">account_circle</span> 
-                        <span class="username">{{ current_user }}</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('main') }}">Home</a></li>
-                        <li><a href="{{ url_for('add') }}">Add</a></li>
-                        <li><a href="{{ url_for('search') }}">Search/Edit</a></li>
-                        <li><a href="{{ url_for('index') }}">Logout</a></li>
-                    </ul>
+                <a href="#" class="dropdown-toggle" id="profile-icon">
+                    <span class="material-symbols-outlined">account_circle</span> 
+                    <span class="username">{{ current_user }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('main') }}">Home</a></li>
+                    <li><a href="{{ url_for('add') }}">Add</a></li>
+                    <li><a href="{{ url_for('search') }}">Search/Edit</a></li>
+                    <li><a href="#" onclick="exportCurrentSearchResults()">Export to Excel</a></li>
+                    <li><a href="{{ url_for('index') }}">Logout</a></li>
+                </ul>
                 </li>
             </ul>
-        </nav>
-    </header>
+            </nav>
+        </header>
 
-    <main>
-        <section class="filter-section">
-            <select id="filter-type" onchange="updatePlaceholder()">
-                <option value="name">Name</option>
-                <option value="surname">Surname</option>
-                <option value="dental_number">Dental Number</option>
-                <option value="diagnosis">Diagnosis</option>
-                <option value="icd_10">ICD-10</option>
-                <option value="type_of_visit">Type of Visit</option>
-                <option value="date">Date</option>  
-            </select>
-
-            <input type="text" id="filter-input" name="filter_value" placeholder="Enter Name" style="display: inline;" />
-            <select id="visit-type-select" style="display: none;">
-                <option value="">Select Visit Type</option>
-                <option value="New patient">New Patient</option>
-                <option value="Follow up">Follow Up</option>
-            </select>
-
-            <button type="button" class="button" onclick="performSearch()">Search</button>
-            <button type="button" class="reset-button"  onclick="resetFilters()">Reset</button>
-        </section>
+        <main>
+            <section class="filter-section">
+                <select id="filter-type" onchange="updatePlaceholder()">
+                    <option value="dental_number">Dental Number</option>
+                    <option value="name">Name</option>
+                    <option value="surname">Surname</option>
+                    <option value="age">Age</option>
+                    <option value="gender">Gender</option>
+                    <option value="diagnosis">Diagnosis</option>
+                    <option value="icd_10">ICD-10</option>
+                    <option value="type_of_visit">Type of Visit</option>
+                    <option value="date">Date</option>  
+                </select>
+            
+                <input type="text" id="filter-input" name="filter_value" placeholder="Enter Dental Number" style="display: inline;" />
+            
+                <select id="visit-type-select" style="display: none;">
+                    <option value="">Select Visit Type</option>
+                    <option value="New patient">New Patient</option>
+                    <option value="Follow up">Follow Up</option>
+                </select>
+            
+                <select id="gender-select" style="display: none;">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            
+                <button type="button" class="button" onclick="performSearch()">Search</button>
+                <button type="button" class="reset-button" onclick="resetFilters()">Reset</button>
+            </section>
+            
 
         <!-- Table to display search results -->
         <table class="result-table" id="result-table" style="display:none;">
             <thead>
                 <tr>
+                    <th>Dental Number</th>
                     <th>Name</th>
                     <th>Surname</th>
-                    <th>Dental Number</th>
+                    <th>Age</th>
+                    <th>Gender</th>
                     <th>Diagnosis</th>
                     <th>ICD-10</th>
                     <th>Type of Visit</th>
                     <th>Date</th>
+                    
                 </tr>
             </thead>
-            <tbody id="table-body"></tbody>
+            <tbody id="table-body">
+            
+            </tbody>
         </table>
 
-        <div id="no-results-modal" class="modal" style="display: none;">
+       
+        <!-- Modal for editing patient information -->
+        <div id="editModal" class="modal" style="display: none;">
             <div class="modal-content">
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-                <p>No search results found</p>
-                <button type="button" onclick="redirectToAdd()">Add New Patient</button>
+                <span class="close-button" onclick="closeModal()">×</span>
+                <h2>Edit Patient Information</h2>
+                
+                <!-- Form to edit information -->
+                <form id="edit-form">
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="edit-name">Name:</label>
+                            <input type="text" id="edit-name" name="name">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="edit-surname">Surname:</label>
+                            <input type="text" id="edit-surname" name="surname">
+                        </div>
+                    </div>
+                
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="age">Age:</label>
+                            <input type="text" id="edit-age" name="age">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="edit-gender">Gender:</label>
+                            <select id="edit-gender" name="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="edit-dental-number">Dental Number:</label>
+                            <input type="text" id="edit-dental-number" name="dental_number">
+                        </div>
+                    </div>
+                
+                    <div id="diagnosis-edit-section" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- This will be dynamically populated with existing diagnoses -->
+                    </div>
+                
+                    <div class="flex-container">
+                        <div style="flex: 1;">
+                            <label for="edit-visit-type">Type of Visit:</label>
+                            <select id="edit-visit-type" name="visit_type">
+                                <option value="New patient">New Patient</option>
+                                <option value="Follow up">Follow Up</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="edit-date">Date:</label>
+                            <input type="date" id="edit-date" name="date">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="created-by">Added by:</label>
+                            <input type="text" id="created-by" name="created_by" readonly>
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="saveChanges()">Save</button>
+                    <button type="button" class="delete-button" style="background-color: red; color: white;" onclick="deletePatient()">Delete</button>
+                </form>        
             </div>
         </div>
 
-    </main>
+        <!-- New Modal for updating patient data -->
+        <div id="updateModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeUpdateModal()">×</span>
+                <h2>Add Patient</h2>
+
+                <!-- Form for new visit -->
+                <form id="update-form">
+                    <!-- Read-only fields -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="update-name">Name:</label>
+                            <input type="text" id="update-name" readonly>
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="update-surname">Surname:</label>
+                            <input type="text" id="update-surname" readonly>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="update-age">Age:</label>
+                            <input type="text" id="update-age" readonly>
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="update-gender">Gender:</label>
+                            <input type="text" id="update-gender" readonly>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="update-dental-number">Dental Number:</label>
+                        <input type="text" id="update-dental-number" readonly>
+                    </div>
+
+                   <!-- ส่วน Diagnosis และ ICD-10 พร้อมปุ่ม + ขนาดเล็ก -->
+                    <div id="diagnosis-section" style="display: flex; flex-direction: column; gap: 10px;">
+                        <div class="diagnosis-icd10-pair" style="display: flex; gap: 10px; align-items: center;">
+                            <div style="flex: 1;">
+                                <label for="update-diagnosis">New Diagnosis:</label>
+                                <input type="text" id="update-diagnosis" name="diagnosis[]" required>
+                            </div>
+                            <div style="flex: 1;">
+                                <label for="update-icd10">New ICD-10:</label>
+                                <input type="text" id="update-icd10" name="icd10[]" required>
+                            </div>
+                            <!-- ปุ่ม + ขนาดเล็ก -->
+                            <button type="button" id="add-diagnosis-btn" class="add-diagnosis-btn" aria-label="Add diagnosis">+</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="update-date">Date:</label>
+                            <input type="date" id="update-date" required>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="update-patient-id">
+                    <button type="button" onclick="saveUpdate()">Add</button>
+                </form>
+            </div>
+        </div>
+
+
+
+        </main>
+        <!-- Modal for no results found -->
+        <div id="noResultsModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeNoResultsModal()">×</span>
+                <h2>No Results Found</h2>
+                <button onclick="goToAddPage()">Go to Add Page</button>
+            </div>
+        </div>
+
 
     <script>
+
+        function closeUpdateModal() {
+            document.getElementById("updateModal").style.display = "none";
+            
+            // Reset the form when closing
+            resetUpdateForm();
+        }
+        
+        function showUpdate(patientId) {
+            fetch(`/get_patient_data/${patientId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("update-name").value = data.name;
+                    document.getElementById("update-surname").value = data.surname;
+                    document.getElementById("update-age").value = data.age;
+                    document.getElementById("update-gender").value = data.gender;
+                    document.getElementById("update-dental-number").value = data.dental_number;
+                    document.getElementById("update-date").value = new Date().toISOString().split('T')[0];
+                    document.getElementById("update-patient-id").value = data.id;
+                    
+                    document.getElementById("updateModal").style.display = "flex";
+                });
+        }
+        
+        document.getElementById('add-diagnosis-btn').addEventListener('click', function() {
+            const diagnosisSection = document.getElementById('diagnosis-section');
+        
+            // สร้างกลุ่มฟิลด์ Diagnosis และ ICD-10 ใหม่
+            const newDiagnosisIcdPair = document.createElement('div');
+            newDiagnosisIcdPair.classList.add('diagnosis-icd10-pair');
+            newDiagnosisIcdPair.style.display = 'flex';
+            newDiagnosisIcdPair.style.gap = '10px';
+            newDiagnosisIcdPair.style.alignItems = 'center';
+            newDiagnosisIcdPair.innerHTML = `
+                <div style="flex: 1;">
+                    <label>New Diagnosis:</label>
+                    <input type="text" name="diagnosis[]" required>
+                </div>
+                <div style="flex: 1;">
+                    <label>New ICD-10:</label>
+                    <input type="text" name="icd10[]" required>
+                </div>
+                <!-- ปุ่ม - สำหรับลบฟิลด์ -->
+                <button type="button" class="remove-diagnosis-btn" onclick="removeDiagnosisField(this)">-</button>
+            `;
+        
+            // เพิ่มกลุ่มฟิลด์ใหม่ลงใน diagnosis-section
+            diagnosisSection.appendChild(newDiagnosisIcdPair);
+        });
+
+        // ฟังก์ชันสำหรับลบฟิลด์ Diagnosis และ ICD-10
+        function removeDiagnosisField(button) {
+            const diagnosisPair = button.parentElement;
+            diagnosisPair.remove();
+        }
+
+        
+        // Function to save updated visit data
+        function saveUpdate() {
+            const patientId = document.getElementById("update-patient-id").value;
+            
+            // Get all diagnosis and ICD-10 values
+            const diagnosisValues = Array.from(document.querySelectorAll('input[name="diagnosis[]"]')).map(input => input.value).join(',');
+            const icd10Values = Array.from(document.querySelectorAll('input[name="icd10[]"]')).map(input => input.value).join(',');
+        
+            const updateData = {
+                name: document.getElementById("update-name").value,
+                surname: document.getElementById("update-surname").value,
+                age: document.getElementById("update-age").value,
+                gender: document.getElementById("update-gender").value,
+                dental_number: document.getElementById("update-dental-number").value,
+                diagnosis: diagnosisValues,  // Combine all diagnosis into one string
+                icd10: icd10Values,  // Combine all ICD-10 into one string
+                visit_type: "Follow up",
+                date: document.getElementById("update-date").value
+            };
+        
+            fetch(`/add_visit/${patientId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert("New visit added successfully");
+                    
+                    // Reset the form
+                    resetUpdateForm();
+                    
+                    closeUpdateModal();
+                    performSearch();  // Update search results if needed
+                } else {
+                    alert("Error adding new visit");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        
+        function resetUpdateForm() {
+            // Get the diagnosis section
+            const diagnosisSection = document.getElementById('diagnosis-section');
+            
+            // Remove all diagnosis rows except the first one
+            const diagnosisRows = diagnosisSection.getElementsByClassName('diagnosis-icd10-pair');
+            
+            // Clear the first row's inputs
+            diagnosisRows[0].querySelector('input[name="diagnosis[]"]').value = '';
+            diagnosisRows[0].querySelector('input[name="icd10[]"]').value = '';
+            
+            // Remove any additional rows
+            while (diagnosisRows.length > 1) {
+                diagnosisSection.removeChild(diagnosisRows[diagnosisRows.length - 1]);
+            }
+            
+            // Reset the date to today
+            document.getElementById("update-date").value = new Date().toISOString().split('T')[0];
+        }
+
         function updatePlaceholder() {
             const filterType = document.getElementById("filter-type").value;
             const filterInput = document.getElementById("filter-input");
             const visitTypeSelect = document.getElementById("visit-type-select");
-
+            const genderSelect = document.getElementById("gender-select");
+        
+            // Reset visibility of fields
             filterInput.style.display = "none";
             visitTypeSelect.style.display = "none";
-
+            genderSelect.style.display = "none";
+        
+            // Show corresponding input based on filter type
             if (filterType === "type_of_visit") {
                 visitTypeSelect.style.display = "inline";
+            } else if (filterType === "gender") {
+                genderSelect.style.display = "inline";
             } else {
                 filterInput.style.display = "inline";
                 switch (filterType) {
@@ -102,6 +387,10 @@
                         break;
                     case "surname":
                         filterInput.placeholder = "Enter Surname";
+                        filterInput.type = "text";
+                        break;
+                    case "age":
+                        filterInput.placeholder = "Enter Age";
                         filterInput.type = "text";
                         break;
                     case "dental_number":
@@ -123,81 +412,290 @@
                 }
             }
         }
-
-        function performSearch() {
-            const filterType = document.getElementById("filter-type").value;
-            const filterValue = filterType === "type_of_visit" ? document.getElementById("visit-type-select").value : document.getElementById("filter-input").value;
-            const table = document.getElementById("result-table");
-            const tableBody = document.getElementById("table-body");
         
-            fetch('/search_results', {
+
+    let currentSearchData = []; // Global variable to store current search results
+
+    function performSearch() {
+        const filterType = document.getElementById("filter-type").value;
+        const filterValue = filterType === "type_of_visit" ? 
+            document.getElementById("visit-type-select").value : 
+            
+            filterType === "gender" ? 
+            document.getElementById("gender-select").value :
+            document.getElementById("filter-input").value;
+        const table = document.getElementById("result-table");
+        const tableBody = document.getElementById("table-body");
+
+        fetch('/search_results', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filterType, filterValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Store the current search results globally
+            currentSearchData = data;
+
+            tableBody.innerHTML = "";
+            if (data.length > 0) {
+                table.style.display = "table";
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                                <td>${item.dental_number}</td>
+                                <td>${item.name}</td>
+                                <td>${item.surname}</td>
+                                <td>${item.age}</td>
+                                <td>${item.gender}</td>
+                                <td>${item.diagnosis}</td>
+                                <td>${item.icd_10}</td>
+                                <td>${item.type_of_visit}</td>
+                                <td>${item.date}</td>
+                                <td>
+                                    <button onclick="showMore(${item.id})">
+                                        <i class="fa fa-cog"></i> <!-- ไอคอนฟันเฟือง -->
+                                    </button>
+                                    <button onclick="showUpdate(${item.id})">
+                                        <i class="fa fa-plus"></i> <!-- ไอคอนเครื่องหมายบวก -->
+                                    </button>
+                                </td
+
+                                `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    table.style.display = "none";
+                    showNoResultsModal();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        function exportCurrentSearchResults() {
+            // Check if there are any search results
+            if (currentSearchData.length === 0) {
+                alert("No data to export. Please perform a search first.");
+                return;
+            }
+        
+            fetch('/export_to_excel', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ filterType, filterValue })
+                body: JSON.stringify(currentSearchData)
             })
-            .then(response => response.json())
-            .then(data => {
-                tableBody.innerHTML = ""; // ล้างข้อมูลก่อนแสดงผลลัพธ์ใหม่
-                if (data.length > 0) {
-                    table.style.display = "table";
-                    
-                    data.forEach((item, index) => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${item.name}</td>
-                            <td>${item.surname}</td>
-                            <td>${item.dental_number}</td>
-                            <td>${item.diagnosis}</td>
-                            <td>${item.icd_10}</td>
-                            <td>${item.type_of_visit}</td>
-                            <td>${item.date}</td>
-                        `;
-                        tableBody.appendChild(row);
-                    });
-    } else {
-        table.style.display = "none";
-        showModal();  // เรียกใช้ modal เมื่อไม่พบข้อมูล
-    }
-})
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a link to download the file
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'patient_data.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while exporting data.");
+            });
+        }
+        function exportToExcel(data) {
+            fetch('/export_to_excel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a link to download the file
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'patient_data.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
             .catch(error => console.error('Error:', error));
         }
-
-        function resetFilters() {
-            document.getElementById("filter-type").value = "name";
-            updatePlaceholder();
-            document.getElementById("filter-input").value = "";
-            document.getElementById("visit-type-select").style.display = "none";
-            document.getElementById("visit-type-select").value = "";
-        }
-
-        function showModal() {
-            const modal = document.getElementById("no-results-modal");
-            modal.style.display = "flex";  // ใช้ flex เพื่อให้ modal อยู่ตรงกลาง
-            console.log("Showing modal"); // ตรวจสอบการทำงาน
+        
+        function showNoResultsModal() {
+            const modal = document.getElementById("noResultsModal");
+            modal.style.display = "flex";
         }
         
-        function closeModal() {
-            const modal = document.getElementById("no-results-modal");
+        function closeNoResultsModal() {
+            const modal = document.getElementById("noResultsModal");
             modal.style.display = "none";
         }
         
+        function goToAddPage() {
+            window.location.href = "{{ url_for('add') }}"; // ไปที่หน้า Add
+        }
+        
 
-        function redirectToAdd() {
-            window.location.href = "{{ url_for('add') }}";
+        function resetFilters() {
+            // Reset filter type to default
+            document.getElementById("filter-type").value = "dental_number";
+            updatePlaceholder(); // Update placeholder based on default filter type
+            
+            // Reset input fields
+            document.getElementById("filter-input").value = "";
+            document.getElementById("visit-type-select").style.display = "none"; // Hide visit type select
+            document.getElementById("visit-type-select").value = ""; // Reset visit type select
+
+            // Reset gender select
+        const genderSelect = document.getElementById("gender-select");
+        if (genderSelect) {
+            genderSelect.style.display = "none"; // Hide gender select
+            genderSelect.value = ""; // Reset gender select
+    }
+            
         }
 
+        // แสดงหรือซ่อนเมนูเมื่อคลิกที่โปรไฟล์
         document.getElementById('profile-icon').addEventListener('click', function(event) {
-            event.stopPropagation();
+            event.stopPropagation(); // ป้องกันไม่ให้คลิกในโปรไฟล์ทำให้หน้าต่างปิด
             const dropdownMenu = document.querySelector('.dropdown-menu');
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         });
 
+        // ปิดเมนูเมื่อคลิกนอกโปรไฟล์
         document.addEventListener('click', function() {
             const dropdownMenu = document.querySelector('.dropdown-menu');
             dropdownMenu.style.display = 'none';
         });
-    </script>
-</body>
+
+        
+        let currentPatient = null;
+
+        function showMore(patientId) {
+            fetch(`/get_patient_data/${patientId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("edit-name").value = data.name;
+                    document.getElementById("edit-surname").value = data.surname;
+                    document.getElementById("edit-age").value = data.age;
+                    document.getElementById("edit-gender").value = data.gender;
+                    document.getElementById("edit-dental-number").value = data.dental_number;
+                    document.getElementById("edit-visit-type").value = data.type_of_visit;
+                    document.getElementById("edit-date").value = data.date;
+                    document.getElementById("created-by").value = data.created_by;
+                    
+                    // Populate diagnoses and ICD-10 codes
+                    const diagnosisSection = document.getElementById("diagnosis-edit-section");
+                    diagnosisSection.innerHTML = ''; // Clear existing rows
+                    
+                    // Split diagnoses and ICD-10 codes
+                    const diagnoses = data.diagnosis ? data.diagnosis.split(',') : [''];
+                    const icd10Codes = data.icd10 ? data.icd10.split(',') : [''];
+                    
+                    // Create rows for diagnoses
+                    diagnoses.forEach((diagnosis, index) => {
+                        const row = document.createElement('div');
+                        row.classList.add('diagnosis-icd10-pair');
+                        row.style.display = 'flex';
+                        row.style.gap = '10px';
+                        row.style.alignItems = 'center';
+                        row.innerHTML = `
+                            <div style="flex: 1;">
+                                <label>Diagnosis:</label>
+                                <input type="text" name="edit-diagnosis[]" value="${diagnosis.trim()}" required>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>ICD-10:</label>
+                                <input type="text" name="edit-icd10[]" value="${icd10Codes[index] ? icd10Codes[index].trim() : ''}" required>
+                            </div>
+                        `;
+                        diagnosisSection.appendChild(row);
+                    });
+                    
+                    // Remove the add diagnosis button
+                    const addDiagnosisBtn = document.getElementById('add-edit-diagnosis-btn');
+                    if (addDiagnosisBtn) {
+                        addDiagnosisBtn.style.display = 'none';
+                    }
+                    
+                    document.getElementById("editModal").style.display = "flex";
+                    currentPatient = data;
+                });
+        }
+        
+        
+        function closeModal() {
+            document.getElementById("editModal").style.display = "none";
+            currentPatient = null;
+        }
+        
+        function saveChanges() {
+            // Collect diagnoses and ICD-10 codes
+            const diagnoses = Array.from(document.querySelectorAll('input[name="edit-diagnosis[]"]'))
+                .map(input => input.value.trim())
+                .filter(value => value !== '');
+            
+            const icd10Codes = Array.from(document.querySelectorAll('input[name="edit-icd10[]"]'))
+                .map(input => input.value.trim())
+                .filter(value => value !== '');
+        
+            // ดึงข้อมูลที่แก้ไข
+            const updatedData = {
+                name: document.getElementById("edit-name").value,
+                surname: document.getElementById("edit-surname").value,
+                age: document.getElementById("edit-age").value,
+                gender: document.getElementById("edit-gender").value,
+                dental_number: document.getElementById("edit-dental-number").value,
+                diagnosis: diagnoses.join(','),
+                icd10: icd10Codes.join(','),
+                type_of_visit: document.getElementById("edit-visit-type").value,
+                date: document.getElementById("edit-date").value,
+            };
+        
+            // ส่งข้อมูลที่แก้ไขไปยังเซิร์ฟเวอร์
+            fetch(`/edit_patient/${currentPatient.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert("The information has been updated");
+                    closeModal();
+                    performSearch(); // อัปเดตผลลัพธ์การค้นหา
+                } else {
+                    alert("An error occurred while saving the data");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        function deletePatient() {
+            if (confirm("Are you sure you want to delete this patient information?")) {
+                fetch(`/delete_patient/${currentPatient.id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert(result.message); // แสดงข้อความยืนยันการลบ
+                        closeModal();
+                        performSearch(); // อัปเดตผลลัพธ์การค้นหา
+                    } else {
+                        alert("An error occurred deleting data");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+            
+        
+        </script>
+    </body>
 </html>
