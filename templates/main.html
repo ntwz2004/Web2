@@ -12,7 +12,7 @@
   <header>
       <nav class="navbar">
         <a class="logo" href="{{ url_for('main') }}">
-          <img src="https://bit.ly/3Ak5v7V" alt="Logo" />
+          <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" />
         </a>
         <ul class="menu-links">
           <span id="close-menu-btn" class="material-symbols-outlined">close</span>
@@ -36,14 +36,14 @@
           <div class="box">
             <div class="boxContent">
               <i class="fa fa-microchip icon"></i>
-              <h1 class="title">Add Patient</h1>
+              <h1 class="title">Add</h1>
             </div>
             <a href="{{ url_for('add') }}"></a>
           </div>
           <div class="box">
             <div class="boxContent">
               <i class="fa fa-calendar icon"></i>
-              <h1 class="title">Search/Edit Patient</h1>
+              <h1 class="title">Search/Edit</h1>
             </div>
             <a href="{{ url_for('search') }}"></a>
           </div>

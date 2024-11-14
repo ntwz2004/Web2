@@ -28,7 +28,7 @@ body{
 }
 .showcase:before{
     content: '';
-    background: url('https://cdn.discordapp.com/attachments/1186935126723145768/1303675788943556668/index.jpg?ex=672d46f1&is=672bf571&hm=cdb89509ebb7323d2b99691253236e2a88e1bd38591c09af404302eb13d48617&') no-repeat center center/cover;
+    background-image: url("/static/images/index.jpg");
     position: absolute;
     top: 0;
     left: 0;
@@ -43,6 +43,7 @@ body{
     justify-content: center;
     text-align: center;
     height: 100%;
+    color: black;
 }
 .showcase h1{
     font-size: 8rem;

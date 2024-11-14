@@ -16,7 +16,7 @@
         <header>
             <nav class="navbar">
             <a class="logo" href="{{ url_for('main') }}">
-                <img src="https://bit.ly/3Ak5v7V" alt="Logo" />
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" />
             </a>
             <ul class="menu-links">
                 <span id="close-menu-btn" class="material-symbols-outlined">close</span>
@@ -555,7 +555,7 @@
         if (genderSelect) {
             genderSelect.style.display = "none"; // Hide gender select
             genderSelect.value = ""; // Reset gender select
-    }
+        }
             
         }
 

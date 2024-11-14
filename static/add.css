@@ -6,8 +6,6 @@ body {
     font-family: Arial, sans-serif; /* ฟอนต์ที่ใช้ในหน้า */
 }
 
-
-
 .form-container {
     max-width: 900px;
     margin: 80px auto; /* ขยับฟอร์มลง */

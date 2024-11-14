@@ -19,7 +19,6 @@ header {
 
 body {
     margin: 0; /* ยกเลิก margin ของ body */
-   
     font-family: Arial, sans-serif; /* ใช้ฟอนต์มาตรฐาน */
 }
 
@@ -37,8 +36,8 @@ header .navbar {
 }
 
 .navbar .logo img {
-  height: 50px; /* Size of the logo for computers */
-  max-height: 50px; /* Prevent exceeding */
+  height: 100px; /* Size of the logo for computers */
+  max-height: 75px; /* Prevent exceeding */
   width: auto; /* Maintain aspect ratio */
   margin-right: 10px; /* Space between logo and text */
 }
@@ -68,7 +67,7 @@ header .navbar {
 
 .hero-section {
   height: 100vh;
-  background-image: url("https://bit.ly/40fM3ns");
+  background-image: url("/static/images/index.jpg");
   background-position: center;
   background-size: cover;
   display: relative;
@@ -313,7 +312,7 @@ p {
 .header {
   position:relative;
   text-align:center;
-  background-image: url("https://bit.ly/40fM3ns");
+  background-image: url("/static/images/index.jpg");
   background-position: center;
   background-size: cover;
   color:white;
