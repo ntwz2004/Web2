@@ -188,7 +188,7 @@
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                         <div style="flex: 1;">
                             <label for="update-age">Age:</label>
-                            <input type="text" id="update-age" readonly>
+                            <input type="text" id="update-age" required>
                         </div>
                         <div style="flex: 1;">
                             <label for="update-gender">Gender:</label>
@@ -268,8 +268,8 @@
         
         document.getElementById('add-diagnosis-btn').addEventListener('click', function() {
             const diagnosisSection = document.getElementById('diagnosis-section');
-        
-            // สร้างกลุ่มฟิลด์ Diagnosis และ ICD-10 ใหม่
+            
+            // Create a new diagnosis and ICD-10 pair
             const newDiagnosisIcdPair = document.createElement('div');
             newDiagnosisIcdPair.classList.add('diagnosis-icd10-pair');
             newDiagnosisIcdPair.style.display = 'flex';
@@ -284,11 +284,20 @@
                     <label>New ICD-10:</label>
                     <input type="text" name="icd10[]" required>
                 </div>
-                <!-- ปุ่ม - สำหรับลบฟิลด์ -->
                 <button type="button" class="remove-diagnosis-btn" onclick="removeDiagnosisField(this)">-</button>
             `;
+            
+            // Add an event listener to set ICD-10 to "-" if empty
+            const diagnosisInput = newDiagnosisIcdPair.querySelector('input[name="diagnosis[]"]');
+            const icd10Input = newDiagnosisIcdPair.querySelector('input[name="icd10[]"]');
         
-            // เพิ่มกลุ่มฟิลด์ใหม่ลงใน diagnosis-section
+            diagnosisInput.addEventListener('input', function() {
+                if (this.value && !icd10Input.value) {
+                    icd10Input.value = "-";
+                }
+            });
+        
+            // Append the new pair to the diagnosis section
             diagnosisSection.appendChild(newDiagnosisIcdPair);
         });
 
@@ -305,7 +314,9 @@
             
             // Get all diagnosis and ICD-10 values
             const diagnosisValues = Array.from(document.querySelectorAll('input[name="diagnosis[]"]')).map(input => input.value).join(',');
-            const icd10Values = Array.from(document.querySelectorAll('input[name="icd10[]"]')).map(input => input.value).join(',');
+            const icd10Values = Array.from(document.querySelectorAll('input[name="icd10[]"]')).map(input => {
+                return input.value.trim() === "" ? "-" : input.value.trim(); // Set to "-" if empty
+            }).join(',');
         
             const updateData = {
                 name: document.getElementById("update-name").value,
@@ -318,7 +329,7 @@
                 visit_type: "Follow up",
                 date: document.getElementById("update-date").value
             };
-        
+            
             fetch(`/add_visit/${patientId}`, {
                 method: 'POST',
                 headers: {
@@ -330,10 +341,7 @@
             .then(result => {
                 if (result.success) {
                     alert("New visit added successfully");
-                    
-                    // Reset the form
                     resetUpdateForm();
-                    
                     closeUpdateModal();
                     performSearch();  // Update search results if needed
                 } else {
